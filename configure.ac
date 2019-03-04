@@ -43,7 +43,7 @@ AC_LANG_CPLUSPLUS
 AC_CHECK_LIB([tbb], [main], [], [echo "libtbb not found.  Please install the Intel TBB before proceeding."; exit -1])
 AC_CHECK_LIB([gtest_main], [main], [], [echo "gtest_main not found.  Please install google test library before proceeding"; exit -1])
 AC_CHECK_LIB([pthread], [pthread_mutex_init], [], [echo "pthreads not found.  Please install pthread library before proceeding"; exit -1])
-AC_CHECK_LIB([boost_thread-mt], [main], [], [echo "boost library not found.  Please install boost library before proceeding"; exit -1])
+AC_CHECK_LIB([boost_thread], [main], [], [echo "boost library not found.  Please install boost library before proceeding"; exit -1])
 AC_CHECK_LIB([crypto], [main], [], [echo "openssl crypto library not found.  Please install openssl library before proceeding"; exit -1])
 PKG_CHECK_MODULES(THRIFT, thrift, )
 CXXFLAGS="$CXXFLAGS $THRIFT_CFLAGS"

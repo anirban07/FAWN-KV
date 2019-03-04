@@ -13,6 +13,7 @@
 #include <arpa/inet.h>
 #include <sys/types.h>
 #include <sstream>
+#include <unistd.h>
 
 using namespace std;
 
