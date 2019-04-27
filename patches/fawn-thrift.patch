@@ -1,6 +1,6 @@
-diff -Naur thrift-0.2.0/lib/cpp/src/server/TThreadedServer.cpp thrift-0.2.0-patched/lib/cpp/src/server/TThreadedServer.cpp
---- thrift-0.2.0/lib/cpp/src/server/TThreadedServer.cpp	2009-03-30 17:35:00.000000000 -0400
-+++ thrift-0.2.0-patched/lib/cpp/src/server/TThreadedServer.cpp	2010-02-05 21:46:29.774587744 -0500
+diff -Naur thrift-0.5.0/lib/cpp/src/server/TThreadedServer.cpp thrift-0.5.0-patched/lib/cpp/src/server/TThreadedServer.cpp
+--- thrift-0.5.0/lib/cpp/src/server/TThreadedServer.cpp	2010-09-28 16:07:17.000000000 +0000
++++ thrift-0.5.0-patched/lib/cpp/src/server/TThreadedServer.cpp	2019-04-27 08:00:35.941492585 +0000
 @@ -51,6 +51,10 @@
  
    ~Task() {}
@@ -21,3 +21,27 @@ diff -Naur thrift-0.2.0/lib/cpp/src/server/TThreadedServer.cpp thrift-0.2.0-patc
        while (!tasks_.empty()) {
          tasksMonitor_.wait();
        }
+diff -Naur thrift-0.5.0/lib/php/src/ext/thrift_protocol/php_thrift_protocol.cpp thrift-0.5.0-patched/lib/php/src/ext/thrift_protocol/php_thrift_protocol.cpp
+--- thrift-0.5.0/lib/php/src/ext/thrift_protocol/php_thrift_protocol.cpp	2010-09-28 16:07:23.000000000 +0000
++++ thrift-0.5.0-patched/lib/php/src/ext/thrift_protocol/php_thrift_protocol.cpp	2019-04-27 08:08:26.091015990 +0000
+@@ -83,7 +83,7 @@
+ #include "zend_exceptions.h"
+ #include "php_thrift_protocol.h"
+ 
+-static function_entry thrift_protocol_functions[] = {
++static zend_function_entry thrift_protocol_functions[] = {
+   PHP_FE(thrift_protocol_write_binary, NULL)
+   PHP_FE(thrift_protocol_read_binary, NULL)
+   {NULL, NULL, NULL}
+diff -Naur thrift-0.5.0/lib/rb/setup.rb thrift-0.5.0-patched/lib/rb/setup.rb
+--- thrift-0.5.0/lib/rb/setup.rb	2010-09-28 16:07:40.000000000 +0000
++++ thrift-0.5.0-patched/lib/rb/setup.rb	2019-04-27 08:00:35.945492532 +0000
+@@ -785,7 +785,7 @@
+     else
+       require 'rbconfig'
+     end
+-    ::Config::CONFIG
++    ::RbConfig::CONFIG
+   end
+ 
+   def initialize(ardir_root, config)
