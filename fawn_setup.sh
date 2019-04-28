@@ -36,8 +36,8 @@ apt install -y \
     tar \
     vim \
     wget
-apt update
-apt upgrade
+apt update -y
+apt upgrade -y
 echo "Done"
 
 echo "Installing php..."
@@ -45,7 +45,7 @@ locale-gen en_US.UTF-8
 LANG=en_US.UTF-8
 
 add-apt-repository ppa:ondrej/php -y
-apt-get update
+apt-get update -y
 
 apt install -y php5.6-dev
 echo "Done"
