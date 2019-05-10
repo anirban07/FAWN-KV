@@ -12,8 +12,10 @@ apt install -y \
     bison \
     build-essential \
     cmake \
+    cpp-5 \
     flex \
-    g++ \
+    g++-5 \
+    gcc-5 \
     libboost-all-dev \
     libboost-dev \
     libboost-filesystem-dev \
@@ -54,7 +56,7 @@ echo "Installing thrift..."
 tar -xjf ${FAWN_HOME}/setup/thrift-0.5.0.tar.bz2 -C ${INSTALLATION_DIR}
 cd ${INSTALLATION_DIR}/thrift-0.5.0
 patch -p1 < ${FAWN_HOME}/patches/fawn-thrift.patch
-./configure
+./configure CC=gcc-5 CXX=g++-5 CPP=cpp-5
 make
 make install
 cd -
