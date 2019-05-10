@@ -75,7 +75,7 @@ echo "Done"
 echo "Installing FAWN..."
 cd ${FAWN_HOME}
 autoreconf -is
-./configure
+./configure CC=gcc-5 CXX=g++-5 CPP=cpp-5
 make
 cd -
 echo "Done"
