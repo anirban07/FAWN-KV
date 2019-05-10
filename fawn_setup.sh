@@ -54,7 +54,6 @@ echo "Installing thrift..."
 tar -xjf ${FAWN_HOME}/setup/thrift-0.5.0.tar.bz2 -C ${INSTALLATION_DIR}
 cd ${INSTALLATION_DIR}/thrift-0.5.0
 patch -p1 < ${FAWN_HOME}/patches/fawn-thrift.patch
-exit 0
 ./configure
 make
 make install
