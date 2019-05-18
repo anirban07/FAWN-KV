@@ -75,7 +75,7 @@ echo "Done"
 echo "Installing FAWN..."
 cd ${FAWN_HOME}
 autoreconf -is
-./configure CC=gcc-5 CXX=g++-5 CPP=cpp-5
+./configure CC=gcc-5 CXX=g++-5 CPP=cpp-5 LT_SYS_LIBRARY_PATH="/usr/local/lib/"
 make
 cd -
 echo "Done"
