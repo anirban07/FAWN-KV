@@ -19,8 +19,11 @@ import java.util.concurrent.atomic.AtomicInteger;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.yahoo.ycsb.ByteIterator;
 import com.yahoo.ycsb.DB;
 import com.yahoo.ycsb.DBException;
+import com.yahoo.ycsb.Status;
+import com.yahoo.ycsb.StringByteIterator;
 
 import fawn.*;
 
@@ -53,9 +56,9 @@ public class FawnKVClient extends DB {
      * @param key The record key of the record to delete.
      * @return Zero on success, a non-zero error code on error. See this class's description for a discussion of error codes.
      */
-    public int delete(String table, String key) {
+    public Status delete(String table, String key) {
 	client.remove(key);
-	return 0;
+	return Status.OK;
     }
 
     /**
@@ -67,10 +70,10 @@ public class FawnKVClient extends DB {
      * @param values A HashMap of field/value pairs to insert in the record
      * @return Zero on success, a non-zero error code on error. See this class's description for a discussion of error codes.
      */
-    public int insert(String table, String key, HashMap<String, String> values) {
+    public Status insert(String table, String key, Map<String, ByteIterator> values) {
 	// Iterate over collection of values, serialize, insert.
 	StringBuffer data = new StringBuffer();
-	for (Map.Entry<String, String> entry : values.entrySet())
+	for (Map.Entry<String, ByteIterator> entry : values.entrySet())
 	    {
 		data.append(entry.getKey());
 		data.append(":");
@@ -78,7 +81,7 @@ public class FawnKVClient extends DB {
 		data.append(";");
 	    }
 	client.put(key, data.toString());
-	return 0;
+	return Status.OK;
     }
 
     /**
@@ -90,18 +93,18 @@ public class FawnKVClient extends DB {
      * @param result A HashMap of field/value pairs for the result
      * @return Zero on success, a non-zero error code on error or "not found".
      */
-    public int read(String table, String key, Set<String> fields,
-			HashMap<String, String> result) {
+    public Status read(String table, String key, Set<String> fields,
+			Map<String, ByteIterator> result) {
 	//System.out.println("Reading (client port " + myPort + ")");
 	String data = client.get(key);
 	String[] values = data.split(";");
 	for (int i = 0; i < values.length; i++) {
 	    String[] pair = values[i].split(":");
 	    if (fields != null && (fields.isEmpty() || fields.contains(pair[0]))) {
-		result.put(pair[0], pair[1]);
+		result.put(pair[0], new StringByteIterator(pair[1]));
 	    }
 	}
-	return 0;
+	return Status.OK;
 
     }
 
@@ -115,10 +118,10 @@ public class FawnKVClient extends DB {
      * @param result A Vector of HashMaps, where each HashMap is a set field/value pairs for one record
      * @return Zero on success, a non-zero error code on error. See this class's description for a discussion of error codes.
      */
-    public int scan(String table, String startkey, int recordcount,
-			Set<String> fields, Vector<HashMap<String, String>> result) {
+    public Status scan(String table, String startkey, int recordcount,
+			Set<String> fields, Vector<HashMap<String, ByteIterator>> result) {
 	// Unsupported for now
-	return 1;
+	return Status.NOT_IMPLEMENTED;
     }
 
     /**
@@ -130,7 +133,7 @@ public class FawnKVClient extends DB {
      * @param values A HashMap of field/value pairs to update in the record
      * @return Zero on success, a non-zero error code on error. See this class's description for a discussion of error codes.
      */
-    public int update(String table, String key, HashMap<String, String> values) {
+    public Status update(String table, String key, Map<String, ByteIterator> values) {
 	//System.out.println("Updating (client port " + myPort + ")");
 	return insert(table, key, values);
     }
