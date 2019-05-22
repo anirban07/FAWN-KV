@@ -21,6 +21,7 @@
 package fawn;
 import fawn.*;
 
+import java.nio.ByteBuffer;
 import org.apache.thrift.TException;
 import org.apache.thrift.transport.TTransport;
 import org.apache.thrift.transport.TSocket;
@@ -71,7 +72,7 @@ public class FawnKVClt {
 	synchronized(myMonitorObject) {
 
 	    try {
-		client.get(key.getBytes(), continuation, cid);
+		client.get(ByteBuffer.wrap(key.getBytes()), continuation, cid);
 		continuation++;
 	    } catch (TException x) {
 		x.printStackTrace();
@@ -94,7 +95,7 @@ public class FawnKVClt {
     public void put(String key, String value) {
 	synchronized(myMonitorObject) {
 	    try {
-		client.put(key.getBytes(), value.getBytes(), continuation, cid);
+		client.put(ByteBuffer.wrap(key.getBytes()), ByteBuffer.wrap(value.getBytes()), continuation, cid);
 		continuation++;
 	    } catch (TException x) {
 		x.printStackTrace();
@@ -118,7 +119,7 @@ public class FawnKVClt {
     public void remove(String key) {
 	synchronized(myMonitorObject) {
 	    try {
-		client.remove(key.getBytes(), continuation, cid);
+		client.remove(ByteBuffer.wrap(key.getBytes()), continuation, cid);
 		continuation++;
 	    } catch (TException x) {
 		x.printStackTrace();
@@ -155,11 +156,11 @@ public class FawnKVClt {
 	    client = c;
 	}
 
-	public void get_response(byte[] value, long continuation)
+	public void get_response(ByteBuffer valueBuffer, long continuation)
 	{
 	    synchronized(client.myMonitorObject) {
 		client.has_data = true;
-		client.data = new String(value);
+		client.data = valueBuffer.toString();
 		client.myMonitorObject.notify();
 	    }
 	}
