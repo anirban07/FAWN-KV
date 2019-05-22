@@ -35,6 +35,11 @@
     <javac srcdir="${src}" destdir="${build}" classpath="${cpath}:${gen}" />
   </target>
 
+  <target name="dbcompile-fawnkv" depends="compile">
+        <property name="db.dir" value="db/fawnkv"/>
+        <antcall target="dbcompile"/>
+  </target>
+
   <target name="compile-ood" depends="init">
     <javac srcdir="${gen-ood}" destdir="${build}" classpath="${cpath}" />
     <javac srcdir="${src}" destdir="${build}" classpath="${cpath}:${gen-ood}" />
