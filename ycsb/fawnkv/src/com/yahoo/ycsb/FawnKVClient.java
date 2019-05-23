@@ -6,7 +6,7 @@
  *
  */
 
-package com.yahoo.ycsb.db;
+//package com.yahoo.ycsb;
 
 import java.util.HashMap;
 import java.util.Map;
