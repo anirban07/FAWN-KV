@@ -123,7 +123,7 @@ DBID* Ring::getSuccessorID(string key)
 
 NodeHandle* Ring::getReplicaGroup(string key) {
 #ifdef DEBUG
-    cout << "[GRG] Looking for key: " <<  bytes_to_hex(k->actual_data_str()) << endl;
+    cout << "[GRG] Looking for key: " <<  bytes_to_hex(key) << endl;
 #endif
 
     DBID k(key);

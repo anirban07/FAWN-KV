@@ -855,7 +855,7 @@ void Manager::joinRing(string ip, int32_t port, Node* n) {
 #ifdef DEBUG
         cout << "virtual node " << i << endl;
         //print_payload(ring_id, 20);
-        id->printValue();
+        id.printValue();
         cout << endl;
 #endif
         VirtualNode* vn = new VirtualNode(n, &id);

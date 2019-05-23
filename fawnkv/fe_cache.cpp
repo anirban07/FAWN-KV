@@ -21,8 +21,6 @@ using boost::shared_ptr;
 
 using namespace fawn;
 
-bool DEBUG = false;
-
 Cache::Cache(int m) {
     old  = new CacheTable();
     cur  = new CacheTable();
@@ -57,13 +55,13 @@ bool Cache::lookup(const DBID& dkey, std::string& value) {
         found = true;
     }
     
-    if (DEBUG) {
+    #ifdef DEBUG
         if (found) 
             cout << "cache hit" << endl;
         else
             cout << "cache miss" << endl;
         cout << "total lookup=" << num_lookups << ",total hit=" << num_hits << endl;
-    }
+    #endif
     return found;
 }
 
@@ -84,6 +82,7 @@ void Cache::insert(const DBID& dkey, const std::string& value) {
     a->second = value;
     a.release();
     sizeCur ++;
-	if (DEBUG)
+	#ifdef DEBUG
     	cout << "insert to cur, now size =" << sizeCur << "/" << sizeOld << endl;
+  #endif
 }
