@@ -37,7 +37,9 @@ pair<Node*, int> NodeHandle::retrievePutTarget() {
 Node* NodeHandle::retrieveGetTarget(bool interimTail) {
   Node* target = NULL;
   //cout << "interim tail = " << (interimTail ? "true" : "false") << endl;
-  if (interimTail && replicaGroup.back()->valid == false) {
+  if (replicaGroup.empty()) {
+    target = owner;
+  } else if (interimTail && replicaGroup.back()->valid == false) {
     if (replicaGroup.size() >= 2) {
         target = replicaGroup[replicaGroup.size()-2];
         int i = replicaGroup.size()-2;
