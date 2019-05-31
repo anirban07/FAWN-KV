@@ -317,7 +317,9 @@ void node_mgr::handle_split(const string& key) {
             // h's lock is held
             if (success == true) {
                 /* Update split Interval_DB with new start id */
-                DBID new_start_id(key);
+                u_int32_t key_id = fawn::HashUtil::BobHash(key);
+                DBID new_start_id((char*)&key_id, sizeof(u_int32_t));
+                //*/DBID new_start_id(key);
                 db->h->setStartID(new_start_id);
                 db->splitPoint = "";
                 // We hold the lock on db, and we don't need to hold the lock
