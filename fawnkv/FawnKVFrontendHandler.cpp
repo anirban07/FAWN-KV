@@ -423,7 +423,9 @@ void Ring::get_response(const std::string& key, const std::string& value, const 
     cout << "\t Success: " << success << endl;
 #endif
     if (NULL != get_cb) {
-        DBID dkey(key);
+        u_int32_t key_id = fawn::HashUtil::BobHash(key);
+        DBID dkey((char*)&key_id, sizeof(u_int32_t));
+        //*/DBID dkey(key);
         get_cb(dkey, value, continuation, success);
     }
 

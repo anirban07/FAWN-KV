@@ -163,8 +163,12 @@ void node_mgr::precopy_request_thread(const std::string& startKey, const std::st
     // Setup socket to other destination server
     FawnKVBackendClient *backend = connectTCP(ip, port);
 
-    DBID startID(startKey);
-    DBID endID(endKey);
+    u_int32_t start_key_id = fawn::HashUtil::BobHash(startKey);
+    DBID startID((char*)&start_key_id, sizeof(u_int32_t));
+    //*/DBID startID(startKey);
+    u_int32_t end_key_id = fawn::HashUtil::BobHash(endKey);
+    DBID endID((char*)&end_key_id, sizeof(u_int32_t));
+    //*/DBID endID(endKey);
 
     /* Find interval_db that contains the split point */
     // Does not lock the db.
@@ -347,8 +351,12 @@ void node_mgr::flush_split(const std::string& startKey, const std::string& endKe
         // Reception of CMM means that it won't get any more updates to this DS.
         cout << "CMM Hops = 2" << endl;
 
-        DBID startID(startKey);
-        DBID endID(endKey);
+        u_int32_t start_key_id = fawn::HashUtil::BobHash(startKey);
+        DBID startID((char*)&start_key_id, sizeof(u_int32_t));
+        //*/DBID startID(startKey);
+        u_int32_t end_key_id = fawn::HashUtil::BobHash(endKey);
+        DBID endID((char*)&end_key_id, sizeof(u_int32_t));
+        //*/DBID endID(endKey);
 
         // Find appropriate intervaldb
         // Does not lock the db.

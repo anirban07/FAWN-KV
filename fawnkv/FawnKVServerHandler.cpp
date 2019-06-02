@@ -129,7 +129,9 @@ void FawnKVServerHandler::get(const std::string& key, const int64_t continuation
     int64_t ss_continuation = reqNumber++;
 
 	ClientData *cd = get_client(cid);
-    DBID dkey(key);
+    u_int32_t key_id = fawn::HashUtil::BobHash(key);
+    DBID dkey((char*)&key_id, sizeof(u_int32_t));
+    //*/DBID dkey(key);
     string value;
     if ((cache) && (cache->lookup(dkey, value))){
         cd->fc->get_response(value, continuation);
@@ -174,7 +176,9 @@ void FawnKVServerHandler::put(const std::string& key, const std::string& value, 
     req_client_map[ss_continuation] = cd;
     string v = value;
     frontend->put(key, value, ss_continuation);
-    DBID dkey(key);
+    u_int32_t key_id = fawn::HashUtil::BobHash(key);
+    DBID dkey((char*)&key_id, sizeof(u_int32_t));
+    //*/DBID dkey(key);
     if (cache)
         cache->insert(dkey, value);
     //cout << "Put Done for CID: " << cid << " continuation: " << continuation << " reqNumber: " << ss_continuation << endl;
