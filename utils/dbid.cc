@@ -32,11 +32,11 @@ namespace fawn {
         }
 
         // Set value
-        memcpy(value, (const char *) &hash_num, sizeof(hash_num));
+        memcpy(value, c, size);
 
         // Pad entry with 0s if needed
         if (size < DBID_LENGTH)
-            memset(value+size, '\0', DBID_LENGTH - sizeof(hash_num));
+            memset(value+size, '\0', DBID_LENGTH - size);
 
     }
 
