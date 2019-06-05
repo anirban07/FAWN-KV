@@ -97,12 +97,8 @@ interval_db* node_mgr::init_interval_db(const string endid, const string my_vid,
                                            .9,
                                            .8,
                                            TEXT_KEYS);
-        u_int32_t start_key_id = fawn::HashUtil::BobHash(startid);
-        DBID d_startid((char*)&start_key_id, sizeof(u_int32_t));
-        // DBID d_startid(startid);
-        u_int32_t end_key_id = fawn::HashUtil::BobHash(endid);
-        DBID d_endid((char*)&end_key_id, sizeof(u_int32_t));
-        // DBID d_endid(endid);
+        DBID d_endid(endid);
+        DBID d_startid(startid);
         i->h->setStartID(d_startid);
         i->h->setEndID(d_endid);
     } else {
@@ -136,12 +132,8 @@ interval_db* node_mgr::init_interval_db(const string endid, const string my_vid,
 FawnDS<FawnDS_Flash>* node_mgr::createTempStore(const string& startid_str, const string& endid_str,
                                   const string& prefix_str)
 {
-    u_int32_t start_key_id = fawn::HashUtil::BobHash(startid_str);
-    DBID p_startid((char*)&start_key_id, sizeof(u_int32_t));
-    // DBID p_startid(startid_str);
-    u_int32_t end_key_id = fawn::HashUtil::BobHash(endid_str);
-    DBID p_endid((char*)&end_key_id, sizeof(u_int32_t));
-    // DBID p_endid(endid_str);
+    DBID p_endid(endid_str);
+    DBID p_startid(startid_str);
     string filename(filebase + prefix_str + bytes_to_hex(endid_str));
     // truncate filename to 255 characters
     if (filename.size() > 255)
@@ -202,12 +194,8 @@ void node_mgr::removeIntervalFile(interval_db* i) {
 list<interval_db*> node_mgr::findAllIntervalDb(const string* startKey,
                                                const string* endKey,
                                                int lockDB) {
-    u_int32_t start_key_id = fawn::HashUtil::BobHash(*startKey);
-    DBID start_id((char*)&start_key_id, sizeof(u_int32_t));
-    //*/DBID start_id(*startKey);
-    u_int32_t end_key_id = fawn::HashUtil::BobHash(*endKey);
-    DBID end_id((char*)&end_key_id, sizeof(u_int32_t));
-    //*/DBID end_id(*endKey);
+    DBID start_id(*startKey);
+    DBID end_id(*endKey);
 
     list<interval_db*> db_list;
 
@@ -260,9 +248,7 @@ list<interval_db*> node_mgr::findAllIntervalDb(const string* startKey,
 }
 
 interval_db* node_mgr::findIntervalDb(const string* key, int lockDB) {
-    u_int32_t key_id = fawn::HashUtil::BobHash(*key);
-    DBID p_id((char*)&key_id, sizeof(u_int32_t));
-    // DBID p_id(*key);
+    DBID p_id(*key);
 
     // lock intervaldb
     pthread_rwlock_rdlock(&interval_lock);
@@ -331,9 +317,7 @@ void node_mgr::handle_split(const string& key) {
             // h's lock is held
             if (success == true) {
                 /* Update split Interval_DB with new start id */
-                u_int32_t key_id = fawn::HashUtil::BobHash(key);
-                DBID new_start_id((char*)&key_id, sizeof(u_int32_t));
-                //*/DBID new_start_id(key);
+                DBID new_start_id(key);
                 db->h->setStartID(new_start_id);
                 db->splitPoint = "";
                 // We hold the lock on db, and we don't need to hold the lock

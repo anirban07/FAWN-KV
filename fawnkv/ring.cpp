@@ -59,9 +59,7 @@ void Ring::UpdateState(ringState rs)
 }
 
 string Ring::getRangeKey(string key) {
-    u_int32_t key_id = fawn::HashUtil::BobHash(key);
-    DBID k((char*)&key_id, sizeof(u_int32_t));
-    // */DBID k(key);
+    DBID k(key);
     list<VirtualNode*>::const_iterator i;
     if (!nodeList.empty()) {
         for (i = nodeList.begin(); i != nodeList.end(); i++) {
@@ -83,9 +81,7 @@ string Ring::getRangeKey(string key) {
 
 DBID* Ring::getSuccessorID(string key)
 {
-    u_int32_t key_id = fawn::HashUtil::BobHash(key);
-    DBID vn((char*)&key_id, sizeof(u_int32_t));
-    // */DBID vn(key);
+    DBID vn(key);
     VirtualNode* p_succ = NULL;
 
     list<VirtualNode*>::const_iterator i, j;
@@ -129,9 +125,8 @@ NodeHandle* Ring::getReplicaGroup(string key) {
 #ifdef DEBUG
     cout << "[GRG] Looking for key: " <<  bytes_to_hex(key) << endl;
 #endif
-    u_int32_t key_id = fawn::HashUtil::BobHash(key);
-    DBID k((char*)&key_id, sizeof(u_int32_t));
-    //*/DBID k(key);
+
+    DBID k(key);
     NodeHandle *nh = NULL;
 
     if (!nodeList.empty()) {
