@@ -3,9 +3,9 @@
 #define _DBID_H_
 
 using namespace std;
-#include <iostream>
-#include <cstdlib>
 #include <stdint.h>
+#include <cstdlib>
+#include <iostream>
 
 /**
  * DBID is a fixed-length identifier for nodes on a ringspace.  Since
@@ -30,6 +30,7 @@ namespace fawn {
     private:
         char value[DBID_LENGTH];
         unsigned int actual_size;
+        uint32_t hash_num;
     public:
         DBID();
         DBID(const char *c, unsigned int size);
