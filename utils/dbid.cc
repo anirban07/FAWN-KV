@@ -4,6 +4,7 @@ using namespace std;
 #include <iomanip>
 #include "dbid.h"
 #include "print.h"
+#include "hashutil.h"
 
 
 namespace fawn {
@@ -22,6 +23,7 @@ namespace fawn {
     void DBID::Init(const char *c, unsigned int size) {
         // Keep track of input size (vs. DBID_LENGTH)
         actual_size = size;
+        hash_num = HashUtil::BobHash(c);
 
         if (size > DBID_LENGTH) {
             cout << "Only " << DBID_LENGTH << " byte IDs supported, size = " << size << ".  Truncating ..." << endl;
@@ -30,11 +32,11 @@ namespace fawn {
         }
 
         // Set value
-        memcpy(value, c, size);
+        memcpy(value, (const char *) &hash_num, sizeof(hash_num));
 
         // Pad entry with 0s if needed
         if (size < DBID_LENGTH)
-            memset(value+size, '\0', DBID_LENGTH - size);
+            memset(value+size, '\0', DBID_LENGTH - sizeof(hash_num));
 
     }
 
@@ -63,44 +65,19 @@ namespace fawn {
 
 
     bool DBID::operator==(const DBID &rhs) const {
-        return (memcmp(value, rhs.value, DBID_LENGTH) == 0);
+        return hash_num == rhs.hash_num;
     }
 
     // Bytewise comparison of equal-length byte arrays
     bool DBID::operator<(const DBID &rhs) const {
-        for (uint i = 0; i < DBID_LENGTH; i++) {
-            if ((unsigned int)value[i] > (unsigned int)rhs.value[i]) {
-                return false;
-            }
-            if ((unsigned int)value[i] < (unsigned int)rhs.value[i]) {
-                return true;
-            }
-        }
-        return false;
+        return hash_num < rhs.hash_num;
     }
 
     uint64_t DBID::operator-(const DBID &rhs) const {
-        uint64_t thisid = (uint64_t) ((0xff & value[0])
-                                      + ((0xff & value[1]) << 8)
-                                      + ((0xff & value[2]) << 16)
-                                      + ((0xff & value[3]) << 24)
-                                      + ((uint64_t)(0xff & value[4]) << 32)
-                                      + ((uint64_t)(0xff & value[5]) << 40)
-                                      + ((uint64_t)(0xff & value[6]) << 48)
-                                      + ((uint64_t)(0xff & value[7]) << 56));
-
-        uint64_t rhsid = (uint64_t) ((0xff & rhs.value[0])
-                                     + ((0xff & rhs.value[1]) << 8)
-                                     + ((0xff & rhs.value[2]) << 16)
-                                     + ((0xff & rhs.value[3]) << 24)
-                                     + ((uint64_t)(0xff & rhs.value[4]) << 32)
-                                     + ((uint64_t)(0xff & rhs.value[5]) << 40)
-                                     + ((uint64_t)(0xff & rhs.value[6]) << 48)
-                                     + ((uint64_t)(0xff & rhs.value[7]) << 56));
-        if (rhsid > thisid)
-            return rhsid - thisid;
+        if (hash_num > rhs.hash_num)
+            return (uint64_t) (hash_num - rhs.hash_num);
         else
-            return thisid - rhsid;
+            return (uint64_t) (rhs.hash_num - hash_num);
     }
 
     // returns this - rhs
