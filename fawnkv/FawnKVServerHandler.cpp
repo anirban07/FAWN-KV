@@ -99,6 +99,7 @@ ClientData* FawnKVServerHandler::get_client(const int32_t cid) {
 }
 
 int32_t FawnKVServerHandler::init(const std::string& clientIP, const int32_t port) {
+    pthread_mutex_lock(p_mutex);
     cout << "Connection from " << clientIP << ":" << port << endl;
     shared_ptr<TTransport> socket(new TSocket(clientIP.data(), port));
     shared_ptr<TTransport> transport(new TBufferedTransport(socket));
@@ -119,6 +120,7 @@ int32_t FawnKVServerHandler::init(const std::string& clientIP, const int32_t por
     ClientData *cd = new ClientData(fc); // Need to destroy at some point
     int cid = clientID++;
     cid_client_map[cid] = cd;
+    pthread_mutex_unlock(p_mutex);
     return cid;
 }
 
